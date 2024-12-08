@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -180,6 +181,7 @@ function generateColumns<T extends GenericObject>(
           id: uniqueId,
           accessorKey: fullPath,
           header: displayHeader,
+          // @ts-ignore
           filterFn:
             typeof value === "number" ? "betweenNumberRange" : "includesString",
           Filter: FilterComponent,
@@ -306,6 +308,7 @@ export function DataTable<T extends GenericObject>({
         {showFilters && (
           <div className="grid grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
             {table.getAllColumns().map((column) => {
+              // @ts-ignore
               const FilterComponent = column.columnDef.Filter;
               if (!FilterComponent) return null;
 
