@@ -17,13 +17,148 @@ function decompressData(compressed: string) {
 const JsonInput: React.FC<JsonInputProps> = ({
   onDataChange,
   className,
-  defaultInputValue = "",
+  defaultInputValue = `
+    [
+  {
+    "id": 1,
+    "firstName": "Sarah",
+    "lastName": "Johnson",
+    "email": "sarah.j@email.com",
+    "age": 32,
+    "address": {
+      "street": "456 Maple Avenue",
+      "city": "Portland",
+      "state": "OR",
+      "zipCode": "97201"
+    },
+    "phoneNumber": "503-555-0123",
+    "occupation": "Software Engineer",
+    "joined": "2023-03-15",
+    "isActive": true,
+    "preferences": {
+      "theme": "dark",
+      "notifications": true,
+      "language": "en-US"
+    }
+  },
+  {
+    "id": 2,
+    "firstName": "Michael",
+    "lastName": "Chen",
+    "email": "mchen@email.com",
+    "age": 28,
+    "address": {
+      "street": "789 Oak Street",
+      "city": "Austin",
+      "state": "TX",
+      "zipCode": "78701"
+    },
+    "phoneNumber": "512-555-0456",
+    "occupation": "Data Analyst",
+    "joined": "2023-06-22",
+    "isActive": true,
+    "preferences": {
+      "theme": "light",
+      "notifications": false,
+      "language": "en-US"
+    }
+  },
+  {
+    "id": 3,
+    "firstName": "Emma",
+    "lastName": "Rodriguez",
+    "email": "emma.r@email.com",
+    "age": 35,
+    "address": {
+      "street": "123 Pine Lane",
+      "city": "Seattle",
+      "state": "WA",
+      "zipCode": "98101"
+    },
+    "phoneNumber": "206-555-0789",
+    "occupation": "Product Manager",
+    "joined": "2022-11-30",
+    "isActive": true,
+    "preferences": {
+      "theme": "auto",
+      "notifications": true,
+      "language": "es-ES"
+    }
+  },
+  {
+    "id": 4,
+    "firstName": "James",
+    "lastName": "Wilson",
+    "email": "jwilson@email.com",
+    "age": 41,
+    "address": {
+      "street": "321 Birch Road",
+      "city": "Chicago",
+      "state": "IL",
+      "zipCode": "60601"
+    },
+    "phoneNumber": "312-555-0321",
+    "occupation": "Marketing Director",
+    "joined": "2023-01-15",
+    "isActive": false,
+    "preferences": {
+      "theme": "light",
+      "notifications": true,
+      "language": "en-GB"
+    }
+  },
+  {
+    "id": 5,
+    "firstName": "Aisha",
+    "lastName": "Patel",
+    "email": "aisha.p@email.com",
+    "age": 29,
+    "address": {
+      "street": "567 Cedar Court",
+      "city": "San Francisco",
+      "state": "CA",
+      "zipCode": "94105"
+    },
+    "phoneNumber": "415-555-0654",
+    "occupation": "UX Designer",
+    "joined": "2023-09-01",
+    "isActive": true,
+    "preferences": {
+      "theme": "dark",
+      "notifications": false,
+      "language": "en-US"
+    }
+  }
+]
+  `,
 }) => {
   const [inputValue, setInputValue] = React.useState(defaultInputValue);
   const [error, setError] = React.useState<string | null>(null);
 
   useEffect(() => {
     setInputValue(defaultInputValue);
+    try {
+      const parsedData = JSON.parse(defaultInputValue);
+      if (!Array.isArray(parsedData)) {
+        setError("Input must be an array of objects");
+        return;
+      }
+      if (parsedData.length === 0) {
+        setError("Array is empty");
+        return;
+      }
+      if (
+        !parsedData.every((item) => typeof item === "object" && item !== null)
+      ) {
+        setError("All items must be objects");
+        return;
+      }
+
+      setError(null);
+      onDataChange(parsedData);
+    } catch (e) {
+      setError("Invalid JSON format");
+    }
   }, [defaultInputValue]);
 
   const handleInputChange = (value: string) => {
@@ -102,7 +237,6 @@ const JsonInput: React.FC<JsonInputProps> = ({
 
 function App() {
   const [data, setData] = React.useState<any[]>([]);
-  // console.log(window.location.search);
 
   useEffect(() => {
     if (window.location.search) {
@@ -115,13 +249,13 @@ function App() {
     }
   }, []);
 
-  console.log(data);
-
   return (
     <>
       <JsonInput
         onDataChange={setData}
-        defaultInputValue={JSON.stringify(data, null, 2)}
+        defaultInputValue={
+          data.length > 0 ? JSON.stringify(data, null, 2) : undefined
+        }
         className="bg-white p-4 rounded-lg border border-gray-200 shadow-sm"
       />
       {data.length > 0 && (

@@ -306,7 +306,7 @@ export function DataTable<T extends GenericObject>({
           />
         </div>
         {showFilters && (
-          <div className="grid grid-cols-3 gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
+          <div className="grid md:grid-cols-3 text-left gap-4 p-4 bg-gray-50 rounded-lg border border-gray-200">
             {table.getAllColumns().map((column) => {
               // @ts-ignore
               const FilterComponent = column.columnDef.Filter;
@@ -324,7 +324,7 @@ export function DataTable<T extends GenericObject>({
           </div>
         )}
       </div>
-      <div className="rounded-lg border border-gray-200 bg-white shadow-sm">
+      <div className="rounded-lg border border-gray-200 bg-white shadow-sm text-left">
         <div className="overflow-x-auto">
           <table className="w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -333,7 +333,7 @@ export function DataTable<T extends GenericObject>({
                   {headerGroup.headers.map((header) => (
                     <th key={header.id} className="group px-6 py-3 text-left">
                       <button
-                        className="flex items-center space-x-2 text-sm font-medium text-gray-900"
+                        className="flex items-left space-x-2 text-sm font-medium text-gray-900 whitespace-nowrap"
                         onClick={header.column.getToggleSortingHandler()}
                       >
                         <span>
